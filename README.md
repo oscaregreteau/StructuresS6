@@ -1,1 +1,0 @@
-# StructuresS6

@@ -1,0 +1,41 @@
+class Polyq:
+    def __init__(self,coef,q,n):
+        self.coef=coef[:]
+        for k in range(len(coef)):
+            for j in range(1,int(((len(coef)-1)-k)/n)+1):
+                coef[k]+=((-1)**(j))*coef[k+j*n]
+        for j in range(n,len(coef)):
+            coef[j]=0
+        self.coef = [c%q for c in coef]
+
+
+    def __str__(self):
+        if self.coef[0]!=0:
+            m=str(self.coef[0])+signe(self.coef[1])
+        else:
+            m=signe(self.coef[1])
+        for i in range(1,len(self.coef)-1):
+            if self.coef[i]==0:
+                continue
+            else:
+                m+=str(abs(self.coef[i]))+'*X^'+str(i)+signe(self.coef[i+1])
+        return m+str(self.coef[len(self.coef)-1])+'*X^'+str(len(self.coef)-1)
+
+    def __add__(self,P2):
+        Q=[0]*(min(len(self.coef),len(P2.coef)))
+        for i in range(min(len(self.coef),len(P2.coef))):
+            Q[i]=self.coef[i]+P2.coef[i]
+        if len(self.coef)>=len(P2.coef):
+            return Polynomial(Q+self.coef[(len(self.coef)-len(P2.coef))+1:])
+        elif len(self.coef)<=len(P2.coef):
+            return Polynomial(Q+P2.coef[(len(P2.coef)-len(self.coef))+1:])
+        else:
+            return Polynomial(Q)
+
+def signe(x):
+    if x<0:
+        return "-"
+    else:
+        return "+"
+
+
